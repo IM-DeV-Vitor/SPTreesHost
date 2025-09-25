@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bot de Dados de Árvores - São Paulo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="heading">Bot de Dados de Árvores</h1>
+        <p class="subtitle">Insira os dados da árvore no formulário abaixo.</p>
+
+        <form id="arvore-form" class="form-grid" autocomplete="off">
+            <div class="input-group">
+                <label for="numero">Nº</label>
+                <input type="number" id="numero" placeholder="Ex: 1" required>
+            </div>
+
+            <div class="input-group">
+                <label for="verna">Vernáculo</label>
+                <input type="text" id="verna" placeholder="Ex: Ipê-amarelo" required>
+            </div>
+
+            <div class="input-group">
+                <label for="nome-cientifico">Nome Científico</label>
+                <input type="text" id="nome-cientifico" placeholder="Ex: Handroanthus albus" required>
+            </div>
+
+            <div class="input-group">
+                <label for="altura">Altura (m)</label>
+                <input type="number" id="altura" placeholder="Ex: 10.5" step="0.1" required>
+            </div>
+
+            <div class="input-group">
+                <label for="dap">DAP (cm)</label>
+                <input type="number" id="dap" placeholder="Ex: 50" required>
+            </div>
+
+            <div class="input-group">
+                <label for="estado-fitossanitario">Estado Fitossanitário</label>
+                <select id="estado-fitossanitario" required>
+                    <option value="">Selecione...</option>
+                    <option value="Ótimo">Ótimo</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Médio">Médio</option>
+                    <option value="Ruim">Ruim</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="condicao-estrutural">Condição Estrutural</label>
+                <select id="condicao-estrutural" required>
+                    <option value="">Selecione...</option>
+                    <option value="Estável">Estável</option>
+                    <option value="Instável">Instável</option>
+                    <option value="Risco iminente">Risco Iminente</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="manejo-sugerido">Manejo Sugerido</label>
+                <input type="text" id="manejo-sugerido" placeholder="Ex: Poda, monitoramento">
+            </div>
+
+            <div class="input-group">
+                <label for="coordenadas-utm">Coordenadas UTM</label>
+                <input type="text" id="coordenadas-utm" placeholder="Ex: 23S 330000 7400000" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Adicionar Árvore</button>
+                <button type="reset" class="btn-secondary">Limpar Formulário</button>
+            </div>
+        </form>
+
+        <div class="table-container">
+            <h2 class="table-title">Dados Coletados</h2>
+            <table id="arvores-table" aria-label="Tabela de árvores coletadas">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Vernáculo</th>
+                        <th>Nome Científico</th>
+                        <th>Altura (m)</th>
+                        <th>DAP (cm)</th>
+                        <th>Estado Fitossanitário</th>
+                        <th>Condição Estrutural</th>
+                        <th>Manejo Sugerido</th>
+                        <th>Coordenadas UTM</th>
+                    </tr>
+                </thead>
+                <tbody id="arvores-list">
+                    <!-- Os dados das árvores serão inseridos aqui dinamicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    const form = document.getElementById('arvore-form');
+    const arvoreList = document.getElementById('arvores-list');
+    let arvoreData = [];
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Coleta os dados do formulário
+        const novaArvore = {
+            numero: parseInt(document.getElementById("numero").value, 10),
+            vernaculo: document.getElementById('verna').value,
+            cientify_name: document.getElementById('nome-cientifico').value,
+            height: parseFloat(document.getElementById('altura').value),
+            dap: parseFloat(document.getElementById('dap').value),
+            phytosanitary_state: document.getElementById('estado-fitossanitario').value,
+            structure_state: document.getElementById('condicao-estrutural').value,
+            suggested_management: document.getElementById('manejo-sugerido').value,
+            coords: { utm: document.getElementById('coordenadas-utm').value } 
+        };
+
+        arvoreData.push(novaArvore);
+
+        // Envia para o backend
+        await fetch("https://sptrees.onrender.com/trees", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(novaArvore)
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            console.log("Resposta do servidor:", data);
+        })
+        .catch(err => {
+            console.error("Erro:", err);
+        });
+
+        renderizarTabela();
+
+        form.reset();
+    });
+
+async function renderizarTabela() {
+    try {
+        const response = await fetch("https://sptrees.onrender.com/trees", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const data = await response.json();
+        console.log("Resposta do servidor:", data);
+
+        arvoreList.innerHTML = '';
+
+        if (!data.trees || !Array.isArray(data.trees)) {
+            console.error("Nenhuma árvore encontrada ou formato inesperado.");
+            return;
+        }
+
+        data.trees.forEach(arvore => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${escapeHtml(arvore.numero)}</td>
+                <td>${escapeHtml(arvore.vernaculo)}</td>
+                <td>${escapeHtml(arvore.cientify_name)}</td>
+                <td>${escapeHtml(arvore.height)}</td>
+                <td>${escapeHtml(arvore.dap)}</td>
+                <td>${escapeHtml(arvore.phytosanitary_state)}</td>
+                <td>${escapeHtml(arvore.structure_state)}</td>
+                <td>${escapeHtml(arvore.suggested_management ?? '')}</td>
+                <td>${escapeHtml(arvore.coords?.utm ?? '')}</td>
+            `;
+            arvoreList.appendChild(row);
+        });
+    } catch (err) {
+        console.error("Erro ao buscar árvores:", err);
+    }
+}
+    function escapeHtml(text) {
+        if (text === undefined || text === null) return '';
+        return String(text)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+    renderizarTabela()
+</script>
+
+</body>
+
+</html>

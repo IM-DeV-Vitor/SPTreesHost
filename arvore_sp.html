@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árvore SP – Cadastro e Manejo Urbano</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 sm:p-8 flex items-center justify-center min-h-screen">
+    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-10 w-full max-w-4xl">
+        <h1 class="text-3xl font-bold text-center text-green-800 mb-2">Árvore SP</h1>
+        <p class="text-center text-gray-600 mb-8">Cadastro e Manejo Urbano</p>
+
+        <form id="tree-form" class="space-y-6">
+            <!-- Informações Básicas -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label for="nome-vernaculo" class="block text-sm font-medium text-gray-700">Nome Vernáculo</label>
+                    <input type="text" id="nome-vernaculo" name="nome-vernaculo" placeholder="Ex: Ipê-amarelo" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2">
+                    <p class="mt-1 text-xs text-gray-500">Sugestão: autocomplete com banco de dados de espécies comuns.</p>
+                </div>
+                <div>
+                    <label for="nome-cientifico" class="block text-sm font-medium text-gray-700">Nome Científico</label>
+                    <input type="text" id="nome-cientifico" name="nome-cientifico" placeholder="Ex: Handroanthus albus" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2">
+                </div>
+            </div>
+
+            <!-- Dados de Medição -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label for="dap" class="block text-sm font-medium text-gray-700">
+                        DAP (Diâmetro à Altura do Peito)
+                        <span id="dap-help" class="text-green-600 cursor-pointer text-xs ml-2 underline">[Ajuda]</span>
+                    </label>
+                    <input type="number" id="dap" name="dap" step="0.1" min="0.1" placeholder="em cm" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2">
+                </div>
+                <div>
+                    <label for="altura" class="block text-sm font-medium text-gray-700">
+                        Altura da Árvore
+                    </label>
+                    <input type="number" id="altura" name="altura" step="0.1" min="0.1" placeholder="em metros (m)" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2">
+                    <div class="flex items-center mt-2">
+                        <input id="altura-estimada" type="checkbox" name="altura-estimada" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label for="altura-estimada" class="ml-2 block text-sm text-gray-900">
+                            Medição Estimada
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Estado e Manejo -->
+            <div>
+                <label for="estado-fitossanitario" class="block text-sm font-medium text-gray-700">Estado Fitossanitário</label>
+                <select id="estado-fitossanitario" name="estado-fitossanitario" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2">
+                    <option value="" disabled selected>Selecione um estado</option>
+                    <option value="saudavel">Saudável</option>
+                    <option value="moderadamente-comprometida">Moderadamente comprometida</option>
+                    <option value="severamente-comprometida">Severamente comprometida</option>
+                    <option value="morta">Morta</option>
+                    <option value="risco-imminente-queda">Em risco iminente de queda</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Manejo Sugerido</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <div class="flex items-center">
+                        <input id="poda-limpeza" type="checkbox" name="manejo-sugerido" value="poda-limpeza" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label for="poda-limpeza" class="ml-2 text-sm text-gray-900">Poda de limpeza</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="poda-formacao" type="checkbox" name="manejo-sugerido" value="poda-formacao" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label for="poda-formacao" class="ml-2 text-sm text-gray-900">Poda de formação</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="poda-reducao" type="checkbox" name="manejo-sugerido" value="poda-reducao" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label for="poda-reducao" class="ml-2 text-sm text-gray-900">Poda de redução</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="contencao-copa" type="checkbox" name="manejo-sugerido" value="contencao-copa" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label for="contencao-copa" class="ml-2 text-sm text-gray-900">Contenção de copa</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="reforco-tutoramento" type="checkbox" name="manejo-sugerido" value="reforco-tutoramento" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label for="reforco-tutoramento" class="ml-2 text-sm text-gray-900">Reforço de tutoramento</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="retirada" type="checkbox" name="manejo-sugerido" value="retirada" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                        <label for="retirada" class="ml-2 text-sm text-gray-900">Retirada</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="monitoramento-continuo" type="checkbox" name="manejo-sugerido" value="monitoramento-continuo" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label for="monitoramento-continuo" class="ml-2 text-sm text-gray-900">Monitoramento contínuo</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="tratamento-fitossanitario" type="checkbox" name="manejo-sugerido" value="tratamento-fitossanitario" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label for="tratamento-fitossanitario" class="ml-2 text-sm text-gray-900">Tratamento fitossanitário</label>
+                    </div>
+                </div>
+                <div id="justificativa-retirada" class="mt-4 hidden">
+                    <label for="justificativa" class="block text-sm font-medium text-gray-700">Justificativa para Retirada</label>
+                    <textarea id="justificativa" name="justificativa" rows="3" placeholder="Detalhe a justificativa para a retirada da árvore." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2"></textarea>
+                </div>
+            </div>
+
+            <!-- Registros Fotográficos -->
+            <div>
+                <label for="fotos" class="block text-sm font-medium text-gray-700">Registros Fotográficos (até 5 fotos)</label>
+                <input type="file" id="fotos" name="fotos" accept="image/jpeg, image/png" multiple class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                <div id="foto-preview-container" class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"></div>
+            </div>
+
+            <!-- Localização e Informações de Risco -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Coordenadas Geográficas</label>
+                    <div class="flex items-center mt-1">
+                        <input type="text" id="latitude" name="latitude" placeholder="Latitude" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 mr-2" required readonly>
+                        <input type="text" id="longitude" name="longitude" placeholder="Longitude" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 mr-2" required readonly>
+                        <button type="button" id="capturar-localizacao" class="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition-colors duration-200 text-sm whitespace-nowrap">Capturar</button>
+                    </div>
+                    <div id="map-placeholder" class="mt-4 h-48 w-full bg-gray-200 rounded-md flex items-center justify-center text-sm text-gray-500 border border-gray-300">
+                        Mapa para confirmação visual
+                    </div>
+                </div>
+
+                <div>
+                    <label for="subprefeitura" class="block text-sm font-medium text-gray-700">Subprefeitura Responsável</label>
+                    <select id="subprefeitura" name="subprefeitura" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2">
+                        <option value="" disabled selected>Selecione uma subprefeitura</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="area-vegetacao-significativa" name="area-vegetacao-significativa" type="checkbox" class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="area-vegetacao-significativa" class="font-medium text-gray-700">Esta árvore está localizada em área de vegetação significativa?</label>
+                            <a href="#" id="geosampa-link" class="block text-xs text-blue-600 hover:text-blue-800 underline">Definição e Critérios GeoSampa</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão de Envio -->
+            <div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                    Cadastrar Árvore
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal de Ajuda DAP -->
+    <div id="dap-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-6 max-w-lg w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold">O que é DAP?</h3>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-600">&times;</button>
+            </div>
+            <p class="text-sm text-gray-700 mb-4">O DAP (Diâmetro à Altura do Peito) é uma medida padrão da dendrometria. Para obtê-la, utilize uma fita métrica para medir a circunferência do tronco a $1,3$ m do solo. O diâmetro é obtido dividindo-se a circunferência por $\pi$ ($3,14$).</p>
+            
+            <img src="https://placehold.co/400x300/E5E7EB/4B5563?text=Ilustração+DAP" alt="Ilustração de como medir o DAP" class="rounded-lg mb-4">
+        </div>
+    </div>
+
+    <!-- JavaScript para a lógica da aplicação -->
+    <script>
+        // Array com as 32 subprefeituras de São Paulo
+        const subprefeituras = [
+            'Aricanduva/Formosa/Carrão', 'Butantã', 'Campo Limpo', 'Capela do Socorro', 'Casa Verde', 'Cidade Ademar', 'Cidade Tiradentes',
+            'Ermelino Matarazzo', 'Freguesia do Ó/Brasilândia', 'Guaianases', 'Ipiranga', 'Itaim Paulista', 'Itaquera',
+            'Jabaquara', 'Jaçanã/Tremembé', 'Lapa', 'M Boi Mirim', 'Mooca', 'Parelheiros', 'Penha', 'Perus',
+            'Pinheiros', 'Pirituba/Jaraguá', 'Santana/Tucuruvi', 'Santo Amaro', 'São Mateus', 'São Miguel',
+            'Sapopemba', 'Sé', 'Vila Maria/Vila Guilherme', 'Vila Mariana', 'Vila Prudente'
+        ].sort();
+
+        // Elementos do DOM
+        const form = document.getElementById('tree-form');
+        const dapHelpButton = document.getElementById('dap-help');
+        const dapModal = document.getElementById('dap-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const retiradaCheckbox = document.getElementById('retirada');
+        const justificativaContainer = document.getElementById('justificativa-retirada');
+        const fotosInput = document.getElementById('fotos');
+        const fotosPreviewContainer = document.getElementById('foto-preview-container');
+        const subprefeituraSelect = document.getElementById('subprefeitura');
+        const capturarLocalizacaoBtn = document.getElementById('capturar-localizacao');
+        const latitudeInput = document.getElementById('latitude');
+        const longitudeInput = document.getElementById('longitude');
+
+        // Funções de UI
+        function populateSubprefeituras() {
+            subprefeituras.forEach(sp => {
+                const option = document.createElement('option');
+                option.value = sp;
+                option.textContent = sp;
+                subprefeituraSelect.appendChild(option);
+            });
+        }
+        
+        function handleFileSelection() {
+            fotosPreviewContainer.innerHTML = '';
+            const files = fotosInput.files;
+
+            if (files.length > 5) {
+                alert('Você pode selecionar no máximo 5 fotos.');
+                fotosInput.value = '';
+                return;
+            }
+
+            for (const file of files) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`O arquivo ${file.name} excede o limite de 5MB.`);
+                    fotosInput.value = '';
+                    fotosPreviewContainer.innerHTML = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imgContainer = document.createElement('div');
+                    imgContainer.className = 'relative group';
+                    imgContainer.innerHTML = `
+                        <img src="${e.target.result}" class="rounded-md object-cover h-24 w-full">
+                        <input type="text" placeholder="Legenda opcional" class="mt-1 block w-full text-xs p-1 rounded-md border-gray-300 shadow-sm">
+                    `;
+                    fotosPreviewContainer.appendChild(imgContainer);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleGeolocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    latitudeInput.value = position.coords.latitude.toFixed(6);
+                    longitudeInput.value = position.coords.longitude.toFixed(6);
+                    // Opcional: exibir mapa usando a API do GeoSampa ou OpenStreetMap
+                    document.getElementById('map-placeholder').innerHTML = `<p class="text-sm text-center p-4">Localização capturada com sucesso! As coordenadas são: <br> Lat: ${latitudeInput.value}, Lon: ${longitudeInput.value}</p>`;
+                }, error => {
+                    console.error('Erro de geolocalização:', error);
+                    document.getElementById('map-placeholder').textContent = 'Não foi possível capturar a localização. Preencha manualmente.';
+                });
+            } else {
+                alert('Seu navegador não suporta geolocalização.');
+                document.getElementById('map-placeholder').textContent = 'Geolocalização não suportada. Preencha manualmente.';
+            }
+        }
+
+        // Listeners de Evento
+        dapHelpButton.addEventListener('click', () => {
+            dapModal.classList.remove('hidden');
+            dapModal.classList.add('flex');
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            dapModal.classList.add('hidden');
+            dapModal.classList.remove('flex');
+        });
+        
+        // Esconder modal ao clicar fora
+        window.addEventListener('click', (event) => {
+            if (event.target === dapModal) {
+                dapModal.classList.add('hidden');
+                dapModal.classList.remove('flex');
+            }
+        });
+
+        retiradaCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                justificativaContainer.classList.remove('hidden');
+                justificativaContainer.querySelector('textarea').setAttribute('required', 'required');
+            } else {
+                justificativaContainer.classList.add('hidden');
+                justificativaContainer.querySelector('textarea').removeAttribute('required');
+            }
+        });
+
+        fotosInput.addEventListener('change', handleFileSelection);
+
+        capturarLocalizacaoBtn.addEventListener('click', handleGeolocation);
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key.includes('manejo-sugerido')) {
+                    if (!data['manejo-sugerido']) data['manejo-sugerido'] = [];
+                    data['manejo-sugerido'].push(value);
+                } else if (key === 'fotos') {
+                    // Lidar com arquivos de foto separadamente, pois FormData inclui o objeto File
+                    // A demonstração apenas mostra os dados do formulário, não o upload de arquivos.
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            // Adicionar legendas das fotos manualmente pq sim
+            const fotoCaptions = Array.from(fotosPreviewContainer.querySelectorAll('input[type="text"]')).map(input => input.value);
+            data['legendas-fotos'] = fotoCaptions;
+
+            // Converter para JSON para demonstrac
+            console.log('Dados do formulário:', JSON.stringify(data, null, 2));
+            alert('Formulário enviado com sucesso! Verifique o console para ver os dados coletados.');
+            form.reset();
+            fotosPreviewContainer.innerHTML = '';
+            justificativaContainer.classList.add('hidden');
+        });
+
+        // Chamada de inicialização
+        populateSubprefeituras();
+    </script>
+</body>
+</html>
