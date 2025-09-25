@@ -19,7 +19,6 @@ const form = document.getElementById('arvore-form');
 
         arvoreData.push(novaArvore);
 
-        // Envia para o backend
         await fetch("https://sptrees.onrender.com/trees", {
             method: "POST",
             headers: {
