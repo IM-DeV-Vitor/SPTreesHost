@@ -92,8 +92,7 @@ async function renderizarTabela() {
     loading = false;
     clearInterval();
     setTimeout(() => {
-        loading_data.style.display = "none";
-        table_container.style.display = "block";
+
     }, 3000)
   }
 }

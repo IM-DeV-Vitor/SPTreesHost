@@ -179,6 +179,9 @@ tbody tr:nth-child(even) td {
     display: none;
     padding: 40px;
     position: relative;
+    user-select: none;     
+    -webkit-user-drag: none;
+    pointer-events: none;
 }
 
 .loading-icons-parts {
