@@ -81,8 +81,14 @@
             </div>
         </form>
 
-        <div class="table-container">
-            <h2 class="table-title">Dados Coletados</h2>
+        <div class="loading-data" id="loading-data">
+            <div id="loading-spinner" class="spinner"></div>
+            <p id="loading-text" class="loading-text">Carregando dados...</p>
+        </div>
+
+
+        <div class="table-container" id="table-container">
+            <h2 class="table-title" id="table-title">Dados Coletados</h2>
             <table id="arvores-table" aria-label="Tabela de árvores coletadas">
                 <thead>
                     <tr>
