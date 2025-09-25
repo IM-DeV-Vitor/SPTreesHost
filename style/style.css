@@ -209,13 +209,11 @@ tbody tr:nth-child(even) td {
     animation-delay: 0s;
 }
 
-/* Árvore da direita */
 #icon-part-3 {
     animation: grow-tree 1.2s ease-in-out infinite alternate;
     animation-delay: 0.3s;
 }
 
-/* Árvore do meio (entra por último) */
 #icon-part-2 {
     animation: grow-tree 1.2s ease-in-out infinite alternate;
     animation-delay: 0.6s;
