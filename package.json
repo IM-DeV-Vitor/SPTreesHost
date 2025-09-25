@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "git clone 'https://github.com/IM-DeV-Vitor/SPTrees' && jest --runInBand"
+    "test": "git clone https://github.com/IM-DeV-Vitor/SPTrees && jest --runInBand"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",
