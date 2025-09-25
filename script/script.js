@@ -91,8 +91,10 @@ async function renderizarTabela() {
   } finally {
     loading = false;
     clearInterval();
-    table_container.style.display = "block";
-    loading_data.style.display = "none";
+    setTimeout(() => {
+        loading_data.style.display = "none";
+        table_container.style.display = "block";
+    }, 3000)
   }
 }
 function escapeHtml(text) {

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
- 
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bot de Dados de Árvores - SP</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -82,7 +82,14 @@
         </form>
 
         <div class="loading-data" id="loading-data">
-            <div id="loading-spinner" class="spinner"></div>
+            <div class="loading-icons-parts">
+                    <div><img id="icon-part-1" class="loading-icons" src="assets/loading-tree-icon.png" alt="icone-loading">
+                </div>
+                    <div><img id="icon-part-2" class="loading-icons" src="assets/loading-tree-icon.png" alt="icone-loading">
+                </div>
+                    <div><img id="icon-part-3" class="loading-icons" src="assets/loading-tree-icon.png" alt="icone-loading">
+                </div>
+            </div>
             <p id="loading-text" class="loading-text">Carregando dados...</p>
         </div>
 
@@ -110,4 +117,5 @@
 
     <script src="script/script.js"></script>
 </body>
+
 </html>
