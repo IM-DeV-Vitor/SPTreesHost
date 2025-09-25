@@ -49,7 +49,7 @@ async function renderizarTabela() {
         table_container.style.display = "none";
         loading_data.style.display = "block";
         }
-    });
+    }, 100);
 
   try {
     const response = await fetch("https://sptrees.onrender.com/trees", {
@@ -57,7 +57,7 @@ async function renderizarTabela() {
       headers: {
         "Content-Type": "application/json",
       },
-    }, 100);
+    });
 
     const data = await response.json();
 
